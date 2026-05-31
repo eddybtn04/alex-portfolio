@@ -1,0 +1,48 @@
+
+sudo mkdir -p mis_practicas/nivel1/{nivel2_A/nivel3_ejec,nivel2_B}
+ls -l
+
+tree mis_practicas/
+
+sudo chown -R sadmin:sadmin mis_practicas
+
+sudo echo "Estructura nivel 2 creada por ebetancourt" > mis_practicas/nivel1/nivel2_A/info.txt
+sudo echo "Estructura nivel 2 creada por ebetancourt" > mis_practicas/nivel1/nivel2_B/info.txt
+
+cd mis_practicas/nivel1/nivel2_A/nivel3_ejec
+
+cat << 'EOF' > ver_arbol.sh
+#!/bin/bash
+echo "Starting Script..."
+cd ../../../../
+ls -lR mis_practicas
+echo "Ending Script..."
+EOF
+
+sudo chown -R sadmin:sadmin ver_arbol.sh
+sudo chmod +x ver_arbol.sh
+./ver_arbol.sh
+
+2- **************************
+
+sudo groupadd evaluacion
+sudo adduser eva1
+sudo adduser eva2
+
+sudo usermod --shell /bin/bash eva1
+sudo usermod --shell /bin/bash eva2
+
+groups eva1
+sudo usermod -a -G evaluacion eva1
+sudo usermod -a -G evaluacion eva2
+
+cd mis_practicas/nivel1/nivel2_A/nivel3_ejec
+sudo chown :evaluacion ver_arbol.sh
+sudo chmod g+rw ver_arbol.sh
+
+set -o noclobber
+
+3.- **************************
+
+sudo chmod 4755 /usr/sbin/fdisk
+sudo usermod -aG disk $USER
