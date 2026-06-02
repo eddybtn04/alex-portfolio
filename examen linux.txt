@@ -46,3 +46,11 @@ set -o noclobber
 
 sudo chmod 4755 /usr/sbin/fdisk
 sudo usermod -aG disk $USER
+
+4.- **************************
+sudo mkdir share_zone
+sudo chmod +t share_zone
+
+5.- **************************
+sudo nano /etc/login.defs
+***Locate the UMASK line (often set to 022) and change it to 027
