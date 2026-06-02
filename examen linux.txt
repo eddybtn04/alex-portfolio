@@ -52,5 +52,47 @@ sudo mkdir share_zone
 sudo chmod +t share_zone
 
 5.- **************************
-sudo nano /etc/login.defs
+sudo umask 027
+sudo vi /etc/login.defs
 ***Locate the UMASK line (often set to 022) and change it to 027
+
+6.- **************************
+sudo groupadd nube
+sudo mkdir /otp/nube_local/datos_nube/
+
+sudo chown -R root:nube /otp/nube_local/
+sudo chown -R root:nube /otp/nube_local/
+
+7.- **************************
+sudo mkdir /examen01
+cd /examen01
+tar -cJpf backup_examen.tar.xz /home/tu_usuario
+
+8.- **************************
+cd /var/tmp
+sudo fallocate -l 500M disco_datos.ISO
+sudo fallocate -l 500M disco_restore.ISO
+sudo fallocate -l 500M disco_swap.ISO
+
+dd if=/dev/zero of=cdata.img bs=1G count=5
+mkfs ext3 -F cdata.img
+
+# 1. Create a blank 1GB image file
+dd if=/dev/zero of=my_image.img bs=1M count=1024
+
+# 2. Format the image file with ext4
+mkfs.ext4 my_image.img
+
+# 3. Mount the image to a directory
+sudo mkdir -p /mnt/my_ext4_img
+sudo mount -o loop my_image.img /mnt/my_ext4_img
+
+sudo nano /etc/fstab
+/home/user/disk.img  /mnt/myimage  ext4  loop,defaults  0  0
+
+sudo mount -a
+
+
+
+
+
