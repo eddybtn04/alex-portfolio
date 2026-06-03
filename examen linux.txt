@@ -64,31 +64,24 @@ sudo chown -R root:nube /otp/nube_local/
 sudo chown -R root:nube /otp/nube_local/
 
 7.- **************************
-sudo mkdir /examen01
-cd /examen01
-tar -cJpf backup_examen.tar.xz /home/tu_usuario
+df -h
+sudo mkdir /examen01 && cd /examen01
+tar -cJpf backup_examen.tar.xz /home/sadmin/mis_practicas
 
 8.- **************************
 cd /var/tmp
-sudo fallocate -l 500M disco_datos.ISO
-sudo fallocate -l 500M disco_restore.ISO
-sudo fallocate -l 500M disco_swap.ISO
 
-dd if=/dev/zero of=cdata.img bs=1G count=5
-mkfs ext3 -F cdata.img
+sudo dd if=/dev/zero of=disco_datos.iso bs=1M count=500
+sudo mkfs ext4 -F disco_datos.iso
 
-# 1. Create a blank 1GB image file
-dd if=/dev/zero of=my_image.img bs=1M count=1024
 
-# 2. Format the image file with ext4
-mkfs.ext4 my_image.img
 
 # 3. Mount the image to a directory
-sudo mkdir -p /mnt/my_ext4_img
-sudo mount -o loop my_image.img /mnt/my_ext4_img
+sudo mkdir -p /mnt/datos
+sudo mount -o loop disco_datos.iso /mnt/datos
 
 sudo nano /etc/fstab
-/home/user/disk.img  /mnt/myimage  ext4  loop,defaults  0  0
+/var/tmp/disco_datos.iso  /mnt/datos  ext4  loop,defaults  0  0
 
 sudo mount -a
 
