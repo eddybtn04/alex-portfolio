@@ -70,22 +70,52 @@ tar -cJpf backup_examen.tar.xz /home/sadmin/mis_practicas
 
 8.- **************************
 cd /var/tmp
-
-sudo dd if=/dev/zero of=disco_datos.iso bs=1M count=500
+/*disco datos*/
+sudo dd if=/dev/zero of=disco_datos.iso bs=1M count=512
 sudo mkfs ext4 -F disco_datos.iso
-
-
-
-# 3. Mount the image to a directory
 sudo mkdir -p /mnt/datos
 sudo mount -o loop disco_datos.iso /mnt/datos
 
-sudo nano /etc/fstab
-/var/tmp/disco_datos.iso  /mnt/datos  ext4  loop,defaults  0  0
+/*disco restore*/
+sudo dd if=/dev/zero of=disco_restore.iso bs=1M count=512
+sudo mkfs ext4 -F disco_restore.iso
+sudo mkdir -p /mnt/restore
+sudo mount -o loop disco_restore.iso /mnt/restore
 
 sudo mount -a
 
+/*swap*/
+sudo dd if=/dev/zero of=/var/tmp/disco_swap.img bs=1M count=512
+sudo losetup -fP /var/tmp/disco_swap.img
+losetup -a
+sudo mkswap /dev/loop{1}
+sudo swapon /dev/loop{1}
 
+sudo nano /etc/fstab
+/var/tmp/disco_datos.iso  /mnt/datos  ext4  loop,defaults,usrquota,grpquota  0  2
+/var/tmp/disco_restore.iso  /mnt/restore  ext4  loop,defaults  0  0
+/dev/loop{1} none swap sw 0 0
+
+9.- **************************
+sudo apt install quota
+
+sudo systemctl daemon-reload
+sudo mount -o remount /mnt/datos
+
+sudo setquota -u eva1 0 20M 0 0 /mnt/datos
+sudo quota -vs eva1
+
+
+10.- **************************
+
+sudo apt install nfs-kernel-server -y
+
+sudo nano /etc/exports
++
+/mnt/restore *(ro,sync,no_subtree_check)
+
+sudo exportfs -a
+sudo systemctl restart nfs-kernel-server
 
 
 
